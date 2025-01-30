@@ -43,8 +43,10 @@ Installation
 
 1.  **Clone or Download** this repository from GitHub:
 
-    `git clone https://github.com/amirradjou/java-grading-assistant.git
-    cd java-grading-assistant`
+    ```
+    git clone https://github.com/amirradjou/java-grading-assistant.git
+    cd java-grading-assistant
+    ```
 
 
 * * * * *
