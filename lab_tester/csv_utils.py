@@ -28,7 +28,7 @@ def save_results_to_csv(results, csv_output_file):
             first_name, last_name, student_id = extract_student_info(folder_name)
 
             num_passed = sum(1 for res in test_dict.values() if res == "PASSED")
-            num_failed = sum(1 for res in test_dict.values() if res == "FAILED")
+            num_failed = sum(1 for res in test_dict.values() if res == "FAILED" or res == "COMPILATION ERROR" or res == "SKIPPED")
             total_tests = len(test_dict)
             score_percentage = round(
                 (num_passed / total_tests) * 100, 2
