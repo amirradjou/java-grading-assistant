@@ -1,110 +1,135 @@
-Java Grading Assistant Script
-========================================
+Project Structure
+-----------------
 
-This script automates the process of compiling and running JUnit tests for student submissions in an Object-Oriented Programming (OOP) course. It scans student folders, compiles their Java code, runs predefined JUnit tests, and records the results in a CSV file.
+```
+lab_tester/
+    ├── __init__.py
+    ├── config.py
+    ├── environment.py
+    ├── folder_discovery.py
+    ├── test_parser.py
+    ├── compiler.py
+    ├── runner.py
+    ├── csv_utils.py
+    ├── student_info.py
+─ main.py
+```
 
-Features
---------
+-   **`config.py`**: Handles parsing of command-line arguments and building a configuration dictionary.
+-   **`environment.py`**: Checks the environment (e.g., JUnit JAR file, Java installation).
+-   **`folder_discovery.py`**: Scans subfolders for the specified source file.
+-   **`test_parser.py`**: Parses the JUnit test file to discover `@Test`-annotated methods.
+-   **`compiler.py`**: Compiles the student Java source and the test file.
+-   **`runner.py`**: Runs each discovered test method individually.
+-   **`csv_utils.py`**: Saves results and missing-folders lists to CSV.
+-   **`student_info.py`**: Extracts student information (First/Last Name, ID) from folder names.
+-   **`main.py`**: The main entry point that orchestrates the entire process.
 
--   **Automated Compilation & Testing**: Compiles Java submissions and runs JUnit tests for each student.
-
--   **JUnit Support**: Uses `junit-platform-console-standalone-1.9.3.jar` for testing.
-
--   **Timeout Handling**: Stops tests if they exceed a set duration.
-
--   **CSV Report Generation**: Outputs detailed test results including student performance.
-
--   **Error Handling**: Reports missing source files and compilation failures.
+* * * * *
 
 Prerequisites
 -------------
 
-Before running the script, ensure you have:
+1.  **Python 3.7+**\
+    Make sure Python 3 is installed and available on your system.
+2.  **Java 11+**\
+    The script expects `java` to be available in your system's PATH.
+3.  **JUnit Console Standalone JAR**\
+    By default, we look for `junit-platform-console-standalone-1.9.3.jar` in the current directory.
+* * * * *
 
--   **Java Development Kit (JDK)** installed and added to the system `PATH`.
+Installation
+------------
 
--   **JUnit Platform Console Standalone JAR** (`junit-platform-console-standalone-1.9.3.jar`) downloaded.
+1.  **Clone or Download** this repository from GitHub:
 
--   **Python 3** installed to run the script.
+    `git clone https://github.com/amirradjou/java-grading-assistant.git
+    cd java-grading-assistant`
 
-Installation & Setup
---------------------
 
-1.  **Clone the Repository:**
-
-    ```
-    git clone https://github.com/amirradjou/java-grading-assistant.git
-    cd java-grading-assistant
-    ```
-
-2.  **Place JUnit JAR in the directory:** Ensure `junit-platform-console-standalone-1.9.3.jar` is in the same folder as the script.
-
-3.  **Prepare Test File:**
-
-    -   Place the test file (e.g., `Lab1Test.java`) in the root directory.
-
-    -   Ensure the test file contains JUnit test cases for grading.
-  
-    -   Ensure the Submission directories are present in the root directory.
+* * * * *
 
 Usage
 -----
 
-Run the script from the command line:
+### Basic Command
 
-```
-python3 main.py
-```
+From the `java-grading-assistant/` directory, run:
 
-By default, the script looks for `Lab1.java` in student folders and `Lab1Test.java` as the test file.
 
-### Command-Line Arguments
+`python main.py [OPTIONS...]`
 
-You can customize the script using the following arguments:
+The script will:
 
-```
-python3 main.py\
-    --source-file Lab1.java\
-    --test-file Lab1Test.java\
-    --junit-jar junit-platform-console-standalone-1.9.3.jar\
-    --csv-output test_results.csv\
-    --test-timeout 3\
-    --compile-timeout 10\
-    --missing-output missing_source_folders.csv
-```
-```
-| Argument | Description | Default |
-| `--source-file` | Name of the student Java file | `Lab1.java` |
-| `--test-file` | Name of the JUnit test file | `Lab1Test.java` |
-| `--junit-jar` | Path to the JUnit JAR file | `junit-platform-console-standalone-1.9.3.jar` |
-| `--csv-output` | Output CSV file for results | `test_results.csv` |
-| `--test-timeout` | Timeout per test (seconds) | `3` |
-| `--compile-timeout` | Timeout for compilation (seconds) | `10` |
-| `--missing-output` | CSV file for folders missing source files | `missing_source_folders.csv` |
-```
+1.  Check if the JUnit JAR exists.
+2.  Check your Java installation by running `java --version`.
+3.  Recursively scan all subfolders for the required source file (default is `Lab1.java`).
+4.  Parse your test file (default is `Lab1Test.java`) for `@Test` methods.
+5.  For each folder that has the source file, compile and run the tests.
+6.  Write results to a CSV file (default `test_results.csv`).
+7.  Write a list of folders missing the source file to another CSV (default `missing_source_folders.csv`).
 
-Output
-------
+### Command-Line Options
 
-1.  **Test Results CSV (**`**test_results.csv**`**)**:
+| Option | Description | Default |
+| --- | --- | --- |
+| `--source-file` | Name of the Java source file to look for in subfolders. | `Lab1.java` |
+| `--test-file` | Name of the JUnit test file. | `Lab1Test.java` |
+| `--junit-jar` | Path/name of the JUnit Console Standalone JAR. | `junit-platform-console-standalone-1.9.3.jar` |
+| `--csv-output` | Name of the CSV file to store results. | `test_results.csv` |
+| `--test-timeout` | Timeout (in seconds) for each test method. | `3` |
+| `--compile-timeout` | Timeout (in seconds) for Java compilation. | `10` |
+| `--missing-output` | Name of the CSV file listing folders that lack the source file. | `missing_source_folders.csv` |
 
-    -   Contains student test results with the number of passed/failed tests and scores.
+For example:
 
-2.  **Missing Source Folders CSV (**`**missing_source_folders.csv**`**)**:
 
-    -   Lists student folders where the required Java source file was not found.
+`python main.py\
+  --source-file Lab2.java\
+  --test-file Lab2Test.java\
+  --junit-jar path/to/junit-platform-console-standalone-1.9.3.jar\
+  --csv-output lab2_results.csv\
+  --missing-output lab2_missing.csv\
+  --test-timeout 5\
+  --compile-timeout 15`
 
-Troubleshooting
----------------
+* * * * *
 
--   **JUnit JAR Not Found?**
+Output Files
+------------
 
-    -   Ensure `junit-platform-console-standalone-1.9.3.jar` is in the script directory.
+1.  **Test Results CSV** (default: `test_results.csv`)
 
--   **Java Not Recognized?**
+    Each row represents a single folder (student submission). The columns include:
 
-    -   Check if Java is installed and available in the system `PATH` by running:
+    -   First Name
+    -   Last Name
+    -   Student ID
+    -   Passed (number of test methods that passed)
+    -   Failed (number of test methods that failed)
+    -   Score % (percentage of passed tests)
+    -   One column for each test method's result (e.g., "PASSED", "FAILED", "COMPILATION ERROR", etc.)
+2.  **Missing Folders CSV** (default: `missing_source_folders.csv`)
 
-        ```
-        java --version
-        ```
+    Contains a list of folders that *did not* contain the required source file. One folder path per line.
+
+* * * * *
+
+Troubleshooting & Tips
+----------------------
+
+1.  **JUnit JAR Not Found**
+    -   Make sure `junit-platform-console-standalone-x.x.x.jar` is in the same directory or specify its location with `--junit-jar`.
+2.  **Java Not Found**
+    -   Ensure `java` is on your `PATH`. On Linux/macOS, you can check with `which java`. On Windows, check your system environment variables.
+3.  **Compilation Errors**
+    -   If compilation fails for a folder, that submission's test methods are marked as "COMPILATION ERROR" in the results CSV.
+    -   Check the "stderr" messages printed in the console for details.
+4.  **Timeout Issues**
+    -   Increase `--test-timeout` or `--compile-timeout` if your Java code requires longer. The defaults are fairly short.
+5.  **Folder Name Parsing**
+    -   By default, the script expects a folder name like `John Doe_123456_assignsubmission_file` to extract "John", "Doe", and "123456" as student details. Adapt the regex in `student_info.py` if your naming convention differs.
+
+
+* * * * *
+
