@@ -110,7 +110,7 @@ Output Files
     -   Passed (number of test methods that passed)
     -   Failed (number of test methods that failed)
     -   Score % (percentage of passed tests)
-    -   One column for each test method's result (e.g., "PASSED", "FAILED", "COMPILATION ERROR", etc.)
+    -   One column for each test method's result (e.g., "PASSED", "FAILED", "SKIPPED", etc.)
 2.  **Missing Folders CSV** (default: `missing_source_folders.csv`)
 
     Contains a list of folders that *did not* contain the required source file. One folder path per line.
