@@ -1,5 +1,3 @@
-# lab_tester/runner.py
-
 import os
 import subprocess
 import time
@@ -13,6 +11,7 @@ def run_tests(folder, test_methods, config):
     ansi_escape     = config["ansi_escape"]
     cp_sep          = config["classpath_separator"]
     test_timeout    = config["test_timeout"]
+    test_file_name  = config["test_file_name"].split(".")[0]
 
     bin_folder = os.path.join(folder, "bin")
     results = {}
@@ -20,8 +19,8 @@ def run_tests(folder, test_methods, config):
     for method_name in test_methods:
         test_run_cmd = [
             "java", "-jar", junit_jar,
-            "--class-path", bin_folder,
-            "--select-method", f"Lab1Test#{method_name}"
+            "--class-path", f"{bin_folder}{cp_sep}.",
+            "--select-method", f"{test_file_name}#{method_name}"
         ]
         print(f"▶️ Running test: {method_name} in {folder}")
 
@@ -49,4 +48,3 @@ def run_tests(folder, test_methods, config):
             results[method_name] = "SKIPPED"
 
     return results
-
