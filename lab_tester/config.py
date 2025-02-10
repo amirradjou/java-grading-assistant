@@ -12,6 +12,8 @@ def parse_args():
                         help="Name of the JUnit test file.")
     parser.add_argument("--junit-jar", default="junit-platform-console-standalone-1.9.3.jar",
                         help="Path/name of the JUnit Console Standalone JAR.")
+    parser.add_argument("--junit-version", type=int, choices=[4, 5], default=5,
+                        help="Specify the JUnit version (4 or 5). Default is JUnit 5.")
     parser.add_argument("--csv-output", default="test_results.csv",
                         help="Name of the CSV file to store results.")
     parser.add_argument("--test-timeout", type=int, default=3,
@@ -29,13 +31,13 @@ def create_config(args):
     """
     return {
         "source_file_name": args.source_file,
-        "test_file_name":   args.test_file,
-        "junit_jar":        args.junit_jar,
-        "csv_output_file":  args.csv_output,
-        "test_timeout":     args.test_timeout,
-        "compile_timeout":  args.compile_timeout,
+        "test_file_name": args.test_file,
+        "junit_jar": args.junit_jar,
+        "junit_version": args.junit_version,
+        "csv_output_file": args.csv_output,
+        "test_timeout": args.test_timeout,
+        "compile_timeout": args.compile_timeout,
         "missing_output_file": args.missing_output,
-        "ansi_escape":      re.compile(r'\x1B\[[0-?]*[ -/]*[@-~]'),
+        "ansi_escape": re.compile(r'\x1B\[[0-?]*[ -/]*[@-~]'),
         "classpath_separator": ";" if platform.system() == "Windows" else ":"
     }
-
