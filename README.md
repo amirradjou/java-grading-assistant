@@ -82,18 +82,22 @@ The script will:
 | `--test-timeout` | Timeout (in seconds) for each test method. | `3` |
 | `--compile-timeout` | Timeout (in seconds) for Java compilation. | `10` |
 | `--missing-output` | Name of the CSV file listing folders that lack the source file. | `missing_source_folders.csv` |
+| `--junit-version` | Version of JUnit in the tests - 4 or 5. | 5 |
 
 For example:
 
 
-`python main.py\
+```
+python main.py\
   --source-file Lab2.java\
   --test-file Lab2Test.java\
   --junit-jar path/to/junit-platform-console-standalone-1.9.3.jar\
   --csv-output lab2_results.csv\
   --missing-output lab2_missing.csv\
   --test-timeout 5\
-  --compile-timeout 15`
+  --compile-timeout 15\
+  --junit-version 4
+  ```
 
 * * * * *
 
