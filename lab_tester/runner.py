@@ -1,6 +1,22 @@
 import os
 import subprocess
 import time
+import re
+
+
+def extract_package_name(test_file_path):
+    """Extracts the package name from a Java test file."""
+    if not os.path.exists(test_file_path):
+        print(f"❌ Error: Test file not found: {test_file_path}")
+        return None
+
+    with open(test_file_path, "r") as file:
+        for line in file:
+            match = re.match(r"^\s*package\s+([\w.]+)\s*;", line)
+            if match:
+                return match.group(1)  # Extract package name dynamically
+    return None  # No package found
+
 
 def run_tests(folder, test_methods, config):
     """
@@ -25,7 +41,7 @@ def run_tests(folder, test_methods, config):
             # JUnit 4 execution: run the entire test class
             test_run_cmd = [
                 "java", "-cp", classpath,
-                "org.junit.runner.JUnitCore", f"lab1.{test_file_name}"
+                "org.junit.runner.JUnitCore", f"{extract_package_name(config["test_file_name"])}.{test_file_name}"
             ]
         else:
             # JUnit 5 execution: run individual methods
